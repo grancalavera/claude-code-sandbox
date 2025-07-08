@@ -2,6 +2,8 @@
 
 A secure DevContainer environment for Claude Code development and testing.
 
+Based on https://github.com/anthropics/claude-code/tree/main/.devcontainer
+
 ## Overview
 
 This repository provides a containerized development environment with network security restrictions, designed for safe experimentation with Claude Code.
@@ -22,6 +24,7 @@ This repository provides a containerized development environment with network se
 ## Security
 
 The environment includes strict network controls:
+
 - Outbound connections limited to: GitHub, NPM registry, Anthropic API, Sentry, and Statsig
 - All other domains are blocked by default
 - Firewall rules are automatically configured on container startup
@@ -36,6 +39,7 @@ The environment includes strict network controls:
 ## Network Access
 
 Due to security restrictions, only these domains are accessible:
+
 - `github.com` and `api.github.com`
 - `registry.npmjs.org`
 - `api.anthropic.com`
