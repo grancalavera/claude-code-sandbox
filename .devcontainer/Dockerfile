@@ -22,7 +22,6 @@ RUN apt update && apt install -y \
   ipset \
   iproute2 \
   dnsutils \
-  aggregate \
   jq
 
 
@@ -87,6 +86,7 @@ RUN npm install -g @anthropic-ai/claude-code
 
 # Firewall Security: Set up network restriction script
 # Copy the firewall initialization script and configure sudo access
+COPY allowed-domains.conf /etc/allowed-domains.conf
 COPY init-firewall.sh /usr/local/bin/
 USER root
 RUN chmod +x /usr/local/bin/init-firewall.sh && \

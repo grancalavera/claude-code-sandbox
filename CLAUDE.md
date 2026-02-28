@@ -24,7 +24,7 @@ The development environment runs in a container with:
 - Claude Code CLI pre-installed globally (`claude-code`)
 - Network restrictions via iptables firewall
 - GitHub CLI (`gh`) for GitHub operations
-- Additional tools: `jq`, `aggregate`, `fzf`, `dnsutils`
+- Additional tools: `jq`, `fzf`, `dnsutils`
 
 ## VS Code Integration
 
@@ -39,11 +39,12 @@ The environment is configured with:
 
 The environment includes a strict firewall configuration (`init-firewall.sh`) that:
 - Blocks most outbound connections by default
-- Allows only specific domains: GitHub, NPM registry, Anthropic API, Sentry, and Statsig
+- Allows only domains listed in `.devcontainer/allowed-domains.conf`
 - Resolves domain IPs dynamically and maintains IP sets using `ipset`
 - Verifies firewall rules are working correctly on startup
-- Uses GitHub's meta API to fetch current IP ranges
 - Runs firewall initialization with sudo privileges during container startup
+
+To modify allowed domains, edit `.devcontainer/allowed-domains.conf` and rebuild the container.
 
 ## Running the Environment
 

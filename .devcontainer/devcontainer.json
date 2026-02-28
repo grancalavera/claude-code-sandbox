@@ -4,7 +4,7 @@
   "service": "claude-code",
   "workspaceFolder": "/workspace",
   "remoteUser": "node",
-  "postCreateCommand": "test -f /home/node/.setup-done || (./.devcontainer/setup-git.sh && sudo /usr/local/bin/init-firewall.sh)",
+  "postCreateCommand": "test -f /home/node/.setup-done || (./.devcontainer/setup-git.sh && sudo /usr/local/bin/init-firewall.sh $(grep -v '^\\s*#' /etc/allowed-domains.conf | grep -v '^\\s*$'))",
   "customizations": {
     "vscode": {
       "extensions": [
