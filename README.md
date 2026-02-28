@@ -25,9 +25,10 @@ This repository provides a containerized development environment with network se
 
 The environment includes strict network controls:
 
-- Outbound connections limited to: GitHub, NPM registry, Anthropic API, Sentry, and Statsig
+- Outbound connections limited to domains listed in `.devcontainer/allowed-domains.conf`
 - All other domains are blocked by default
 - Firewall rules are automatically configured on container startup
+- To modify allowed domains, edit `.devcontainer/allowed-domains.conf` and rebuild the container
 
 ## Development Environment
 

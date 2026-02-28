@@ -1,0 +1,25 @@
+services:
+  claude-code:
+    build:
+      context: .devcontainer
+      dockerfile: Dockerfile
+      args:
+        TZ: ${TZ:-Europe/London}
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    user: node
+    working_dir: /workspace
+    volumes:
+      - .:/workspace:delegated
+      - claude-code-bashhistory:/commandhistory
+      - claude-code-config:/home/node/.claude
+    environment:
+      CLAUDE_CONFIG_DIR: /home/node/.claude
+      POWERLEVEL9K_DISABLE_GITSTATUS: "true"
+    stdin_open: true
+    tty: true
+
+volumes:
+  claude-code-bashhistory:
+  claude-code-config:

@@ -22,7 +22,11 @@ RUN apt update && apt install -y \
   ipset \
   iproute2 \
   dnsutils \
-  aggregate \
+  iputils-ping \
+  netcat-openbsd \
+  tcpdump \
+  traceroute \
+  strace \
   jq
 
 
@@ -65,6 +69,7 @@ USER node
 # Configure npm to use our writable global directory
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PATH=$PATH:/usr/local/share/npm-global/bin
+RUN npm config set update-notifier false && npm config set fund false
 
 # Shell Configuration: Use zsh as the default shell
 # Provides better interactive experience than bash
@@ -87,9 +92,17 @@ RUN npm install -g @anthropic-ai/claude-code
 
 # Firewall Security: Set up network restriction script
 # Copy the firewall initialization script and configure sudo access
+COPY allowed-domains.conf /etc/allowed-domains.conf
 COPY init-firewall.sh /usr/local/bin/
 USER root
 RUN chmod +x /usr/local/bin/init-firewall.sh && \
-  echo "node ALL=(root) NOPASSWD: /usr/local/bin/init-firewall.sh" > /etc/sudoers.d/node-firewall && \
+  echo "node ALL=(root) NOPASSWD: ALL" > /etc/sudoers.d/node-firewall && \
   chmod 0440 /etc/sudoers.d/node-firewall
+
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 USER node
+
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["zsh"]
