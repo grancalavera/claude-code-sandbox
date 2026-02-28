@@ -1,12 +1,10 @@
 {
   "name": "Claude Code Yolo Sandbox",
-  "build": {
-    "dockerfile": "Dockerfile",
-    "args": {
-      "TZ": "${localEnv:TZ:Europe/London}"
-    }
-  },
-  "runArgs": ["--cap-add=NET_ADMIN", "--cap-add=NET_RAW"],
+  "dockerComposeFile": ["../docker-compose.yml"],
+  "service": "claude-code",
+  "workspaceFolder": "/workspace",
+  "remoteUser": "node",
+  "postCreateCommand": "test -f /home/node/.setup-done || (./.devcontainer/setup-git.sh && sudo /usr/local/bin/init-firewall.sh)",
   "customizations": {
     "vscode": {
       "extensions": [
@@ -32,17 +30,5 @@
         }
       }
     }
-  },
-  "remoteUser": "node",
-  "mounts": [
-    "source=claude-code-bashhistory,target=/commandhistory,type=volume",
-    "source=claude-code-config,target=/home/node/.claude,type=volume"
-  ],
-  "remoteEnv": {
-    "CLAUDE_CONFIG_DIR": "/home/node/.claude",
-    "POWERLEVEL9K_DISABLE_GITSTATUS": "true"
-  },
-  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=delegated",
-  "workspaceFolder": "/workspace",
-  "postCreateCommand": "./.devcontainer/setup-git.sh && sudo /usr/local/bin/init-firewall.sh"
+  }
 }

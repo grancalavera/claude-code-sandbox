@@ -5,8 +5,7 @@ IFS=$'\n\t'       # Stricter word splitting
 # Flush existing rules and delete existing ipsets
 iptables -F
 iptables -X
-iptables -t nat -F
-iptables -t nat -X
+# NOTE: Do NOT flush nat table — Docker uses nat rules for its embedded DNS (127.0.0.11)
 iptables -t mangle -F
 iptables -t mangle -X
 ipset destroy allowed-domains 2>/dev/null || true

@@ -4,12 +4,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a DevContainer-based sandbox environment for Claude Code development and testing. The repository is primarily configured for containerized development with security restrictions and firewall controls.
+This is a containerized sandbox environment for Claude Code development and testing. The container runtime is defined in `docker-compose.yml` (the single source of truth), with VS Code devcontainer support via a thin `.devcontainer/devcontainer.json` wrapper that delegates to compose.
 
 ## Architecture
 
 The environment is built around:
-- **DevContainer Configuration**: Node.js 24-based development environment with zsh shell
+- **Docker Compose**: Primary runtime configuration (`docker-compose.yml`) — build, volumes, capabilities, env vars
+- **DevContainer Wrapper**: `.devcontainer/devcontainer.json` references compose for VS Code "Reopen in Container" support
 - **Security Layer**: Network firewall that restricts outbound connections to approved domains only
 - **Development Tools**: Pre-configured with ESLint, Prettier, GitLens, and Git utilities
 - **Container Security**: Runs with NET_ADMIN and NET_RAW capabilities for firewall management
@@ -43,6 +44,21 @@ The environment includes a strict firewall configuration (`init-firewall.sh`) th
 - Verifies firewall rules are working correctly on startup
 - Uses GitHub's meta API to fetch current IP ranges
 - Runs firewall initialization with sudo privileges during container startup
+
+## Running the Environment
+
+### Via Docker Compose (CLI)
+
+```bash
+docker compose up -d
+docker compose exec claude-code zsh
+```
+
+On first start, the entrypoint script automatically runs git setup and firewall initialization (tracked by a `/home/node/.setup-done` marker file).
+
+### Via VS Code DevContainer
+
+Use "Reopen in Container" — VS Code reads `.devcontainer/devcontainer.json`, which delegates to `docker-compose.yml` for build/runtime config. The `postCreateCommand` handles git and firewall setup.
 
 ## Development Commands
 
