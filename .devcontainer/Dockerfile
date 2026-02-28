@@ -22,6 +22,11 @@ RUN apt update && apt install -y \
   ipset \
   iproute2 \
   dnsutils \
+  iputils-ping \
+  netcat-openbsd \
+  tcpdump \
+  traceroute \
+  strace \
   jq
 
 
@@ -64,6 +69,7 @@ USER node
 # Configure npm to use our writable global directory
 ENV NPM_CONFIG_PREFIX=/usr/local/share/npm-global
 ENV PATH=$PATH:/usr/local/share/npm-global/bin
+RUN npm config set update-notifier false && npm config set fund false
 
 # Shell Configuration: Use zsh as the default shell
 # Provides better interactive experience than bash
