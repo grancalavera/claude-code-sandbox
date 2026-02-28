@@ -14,6 +14,7 @@ This repository provides a containerized development environment with network se
 - **Development Ready**: Pre-configured with Node.js 24, zsh shell, and development tools
 - **Claude Code Integration**: Claude Code CLI pre-installed and ready to use
 - **Git Configuration**: Auto-configured with user settings and best practices
+- **Browser Testing**: System Chromium pre-installed for Playwright/headless browser testing
 
 ## Getting Started
 
@@ -35,6 +36,7 @@ The environment includes strict network controls:
 - **Runtime**: Node.js 24
 - **Shell**: Zsh with powerline10k theme
 - **Tools**: ESLint, Prettier, Git Delta, fzf, GitHub CLI
+- **Browser**: System Chromium (use `$CHROMIUM_PATH` with Playwright)
 - **User**: Runs as `node` user (non-root)
 
 ## Network Access
@@ -46,3 +48,4 @@ Due to security restrictions, only these domains are accessible:
 - `api.anthropic.com`
 - `sentry.io`
 - `statsig.anthropic.com` and `statsig.com`
+- `playwright.azureedge.net`

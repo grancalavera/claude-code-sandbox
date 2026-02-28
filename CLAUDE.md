@@ -13,7 +13,8 @@ The environment is built around:
 - **DevContainer Wrapper**: `.devcontainer/devcontainer.json` references compose for VS Code "Reopen in Container" support
 - **Security Layer**: Network firewall that restricts outbound connections to approved domains only
 - **Development Tools**: Pre-configured with ESLint, Prettier, GitLens, and Git utilities
-- **Container Security**: Runs with NET_ADMIN and NET_RAW capabilities for firewall management
+- **Container Security**: Runs with NET_ADMIN, NET_RAW, and SYS_ADMIN capabilities for firewall management and Chrome sandbox
+- **Browser Testing**: System Chromium pre-installed for Playwright/headless browser testing
 
 ## DevContainer Environment
 
@@ -24,6 +25,7 @@ The development environment runs in a container with:
 - Claude Code CLI pre-installed globally (`claude-code`)
 - Network restrictions via iptables firewall
 - GitHub CLI (`gh`) for GitHub operations
+- System Chromium for Playwright/headless browser testing
 - Additional tools: `jq`, `fzf`, `dnsutils`
 
 ## VS Code Integration
@@ -82,6 +84,8 @@ Key environment variables set in the container:
 - `CLAUDE_CONFIG_DIR`: `/home/node/.claude`
 - `DEVCONTAINER`: `true`
 - `NPM_CONFIG_PREFIX`: `/usr/local/share/npm-global`
+- `CHROMIUM_PATH`: `/usr/bin/chromium`
+- `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD`: `1`
 - `POWERLEVEL9K_DISABLE_GITSTATUS`: `true`
 
 ## Volume Mounts
@@ -99,5 +103,20 @@ Due to the firewall configuration, only the following domains are accessible:
 - Anthropic API (api.anthropic.com)
 - Sentry (sentry.io)
 - Statsig (statsig.anthropic.com, statsig.com)
+- Playwright CDN (playwright.azureedge.net)
 
 Any attempts to access other domains will be blocked by the firewall. The firewall verification process runs during container startup and confirms that blocked domains (like example.com) are unreachable while allowed domains remain accessible.
+
+## Playwright / Headless Browser
+
+The container includes system Chromium for headless browser testing with Playwright:
+
+- Chromium is installed via apt (no Playwright CDN download needed)
+- `CHROMIUM_PATH` env var points to `/usr/bin/chromium`
+- `PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1` prevents Playwright from downloading its own browsers
+- `SYS_ADMIN` capability and 2GB shared memory (`shm_size`) support Chrome's sandbox
+- When launching Chromium via Playwright, pass the executable path explicitly:
+  ```js
+  chromium.launch({ executablePath: process.env.CHROMIUM_PATH })
+  ```
+- Run `./test-playwright.sh` to verify the setup works
