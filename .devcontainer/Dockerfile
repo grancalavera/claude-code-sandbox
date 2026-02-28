@@ -29,6 +29,10 @@ RUN apt update && apt install -y \
   strace \
   jq
 
+# Chromium: Install system Chromium for Playwright/headless browser testing
+RUN apt update && apt install -y chromium
+ENV CHROMIUM_PATH=/usr/bin/chromium
+ENV PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1
 
 # NPM Global Directory: Configure npm to use a writable global directory
 # This prevents permission issues when installing global packages
