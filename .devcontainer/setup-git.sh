@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# In reality we want the agent to have its own git configuration, not to 
+# pretend to be the user
+
 # Configure git settings for the development container
 git config --global core.autocrlf input
 git config --global trailer.Co-Authored-By.where after
